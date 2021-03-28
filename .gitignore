@@ -1,0 +1,41 @@
+# User-specific stuff
+**/.idea/*
+*.xml
+
+# CMake
+cmake-build-*/
+
+# File-based project format
+*.iws
+
+# IntelliJ
+out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Package Files #
+*.jar
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+.DS_Store
+._*
+Thumbs.db
+*.jpg
+
+# Exceptions
+!**/lib/*.jar
+
+!**/.idea/misc.xml
+!**/.idea/modules.xml
