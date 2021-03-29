@@ -4,16 +4,20 @@ public class Grudger extends Prisoner {
 
     private boolean opponentBetrayed = false;
 
-    public Grudger() {
-        super();
+    public Grudger(double probOfMistake) {
+        super(probOfMistake);
     }
 
     @Override
-    public boolean coopOrBetray(ArrayList<Boolean> oppPrevious) {
-        boolean ret = !opponentBetrayed;
-        if (oppPrevious.size() != 0 && !oppPrevious.get(oppPrevious.size() - 1))
+    public boolean coopOrBetray(ArrayList<Boolean> oppHistory) {
+        if (oppHistory.size() != 0 && !oppHistory.get(oppHistory.size() - 1))
             opponentBetrayed = true;
-        previousResponses.add(ret);
-        return ret;
+        return makeMistake(!opponentBetrayed);
+    }
+
+    public String toString() {
+        String str = "Type: Grudger\n";
+        str = str + "Total Score: " + score;
+        return str;
     }
 }

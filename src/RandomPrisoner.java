@@ -2,17 +2,21 @@ import java.util.ArrayList;
 
 public class RandomPrisoner extends Prisoner {
 
-    private final double cooProbability;
+    private final double probOfCoop;
 
-    public RandomPrisoner(double cooProbability) {
-        super();
-        this.cooProbability = cooProbability;
+    public RandomPrisoner(double probOfMistake, double probOfCoop) {
+        super(probOfMistake);
+        this.probOfCoop = probOfCoop;
     }
 
     @Override
-    public boolean coopOrBetray(ArrayList<Boolean> oppPrevious) {
-        boolean ret = Math.random() < cooProbability;
-        previousResponses.add(ret);
-        return ret;
+    public boolean coopOrBetray(ArrayList<Boolean> oppHistory) {
+        return makeMistake(Math.random() < probOfCoop);
+    }
+
+    public String toString() {
+        String str = "Type: Random Prisoner (probOfCoop = " + probOfCoop + ")\n";
+        str = str + "Total Score: " + score;
+        return str;
     }
 }
