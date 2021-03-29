@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Grudger extends Prisoner {
 
-    private boolean opponentBetrayed = false;
+    private boolean opponentBetrayed;
 
     public Grudger(double probOfMistake) {
         super(probOfMistake);
@@ -10,6 +10,8 @@ public class Grudger extends Prisoner {
 
     @Override
     public boolean coopOrBetray(ArrayList<Boolean> oppHistory) {
+        if (oppHistory.size() == 0)
+            opponentBetrayed = false;
         if (oppHistory.size() != 0 && !oppHistory.get(oppHistory.size() - 1))
             opponentBetrayed = true;
         return makeMistake(!opponentBetrayed);

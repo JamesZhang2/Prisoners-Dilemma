@@ -12,12 +12,13 @@ public class Detective extends Prisoner{
     @Override
     public boolean coopOrBetray(ArrayList<Boolean> oppHistory) {
         if (history.size() < probe.length) {
+            if (history.size() == 0)
+                oppHasBetrayed = false;
+            else
+                oppHasBetrayed = oppHasBetrayed || !oppHistory.get(oppHistory.size() - 1);
             return makeMistake(probe[history.size()]);
         } else if (history.size() == probe.length){
-            oppHasBetrayed = !probe[0];
-            for (int i = 1; i < probe.length; i++) {
-                oppHasBetrayed = oppHasBetrayed || !probe[i];
-            }
+            oppHasBetrayed = oppHasBetrayed || !oppHistory.get(oppHistory.size() - 1);
             // If opp has never betrayed, become a Cheater
             // If opp has betrayed, become a Copycat
             boolean ret = oppHasBetrayed ? oppHistory.get(oppHistory.size() - 1) : false;
