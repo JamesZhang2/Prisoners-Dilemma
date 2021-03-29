@@ -8,6 +8,7 @@ public abstract class Prisoner {
 
     public abstract boolean coopOrBetray(ArrayList<Boolean> oppHistory);
     public abstract Prisoner clone();
+    public abstract String getType();
 
     public void addToHistory(boolean response) {
         history.add(response);
@@ -40,5 +41,10 @@ public abstract class Prisoner {
 
     protected boolean makeMistake(boolean response) {
         return response ^ Math.random() < probOfMistake;  // ^ is the XOR operator
+    }
+
+    @Override
+    public String toString() {
+        return getType() +  "\nTotal Score: " + score;
     }
 }

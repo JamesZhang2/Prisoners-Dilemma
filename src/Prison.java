@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Prison {
 
     private static Prisoner[] prisoners;
@@ -107,8 +109,38 @@ public class Prison {
 
     private static void printResults(int gen) {
         System.out.println("Generation " + (gen + 1) + ": ");
-        for (int i = 0; i < prisoners.length; i++) {
-            System.out.println(prisoners[i]);
+        printClasses();
+        System.out.println("--------------------------");
+    }
+
+    private static void printClasses() {
+        ArrayList<String> prisonerTypes = new ArrayList<>();
+        ArrayList<Integer> prisonerNumbers = new ArrayList<>();
+        for (Prisoner prisoner : prisoners) {
+            boolean isFound = false;
+            for (int i = 0; i < prisonerTypes.size(); i++) {
+                if (prisoner.getType().equals(prisonerTypes.get(i))) {
+                    prisonerNumbers.set(i, prisonerNumbers.get(i) + 1);
+                    isFound = true;
+                    break;
+                }
+            }
+            if (!isFound) {
+                prisonerTypes.add(prisoner.getType());
+                prisonerNumbers.add(1);
+            }
+        }
+        for (int i = 0; i < prisonerTypes.size(); i++) {
+            int num = prisonerNumbers.get(i);
+            System.out.println(prisonerTypes.get(i) + ": " + num + (num == 1 ? " Prisoner" : " Prisoners"));
+        }
+    }
+
+    // For debugging
+    private static void printDetailedResults(int gen) {
+        System.out.println("Generation " + (gen + 1) + ": ");
+        for (Prisoner prisoner : prisoners) {
+            System.out.println(prisoner);
         }
         System.out.println("--------------------------");
     }

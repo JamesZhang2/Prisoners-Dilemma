@@ -33,14 +33,13 @@ public class Detective extends Prisoner{
         return new Detective(probOfMistake, probe);
     }
 
-    public String toString() {
+    @Override
+    public String getType() {
         String probeStr = "";
         for (int i = 0; i < probe.length - 1; i++) {
             probeStr = probeStr + probe[i] + ", ";
         }
         probeStr += probe[probe.length - 1];
-        String str = "Type: Detective(" + probeStr + ")\n";
-        str = str + "Total Score: " + score;
-        return str;
+        return "Type: Detective(" + probeStr + ")";
     }
 }

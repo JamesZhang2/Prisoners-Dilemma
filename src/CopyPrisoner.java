@@ -40,24 +40,28 @@ public class CopyPrisoner extends Prisoner{
         return new CopyPrisoner(probOfMistake, gate, memory);
     }
 
+    @Override
+    public String getType() {
+        return "Type: Copy(" + gate + ", " + memory + ")";
+    }
+
+    @Override
     public String toString() {
-        String str = "Type: Copy(" + gate + ", " + memory + ")\n";
-        str = str + "Total Score: " + score;
-        return str;
+        return getType() + "\nTotal Score: " + score;
     }
 
     public enum LogicGate {
         AND("AND"),
         OR("OR");
 
-        public final String type;
+        public final String gate;
 
-        LogicGate(String type) {
-            this.type = type;
+        LogicGate(String gate) {
+            this.gate = gate;
         }
 
         public String toString() {
-            return type;
+            return gate;
         }
     }
 }

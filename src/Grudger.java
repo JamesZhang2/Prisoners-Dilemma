@@ -20,9 +20,8 @@ public class Grudger extends Prisoner {
         return new Grudger(probOfMistake);
     }
 
-    public String toString() {
-        String str = "Type: Grudger\n";
-        str = str + "Total Score: " + score;
-        return str;
+    @Override
+    public String getType() {
+        return "Type: Grudger";
     }
 }
