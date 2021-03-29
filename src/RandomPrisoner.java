@@ -1,5 +1,13 @@
 import java.util.ArrayList;
 
+/**
+ * The RandomPrisoner randomly chooses to cooperate or betray,
+ * with its probability of cooperating stored as a private instance variable.
+ *
+ * Special RandomPrisoners:
+ * RandomPrisoner(0.0) is called a Cheater.
+ * RandomPrisoner(1.0) is called a Cooperator.
+ */
 public class RandomPrisoner extends Prisoner {
 
     private final double probOfCoop;
@@ -21,6 +29,11 @@ public class RandomPrisoner extends Prisoner {
 
     @Override
     public String getType() {
-        return "Type: Random(" + probOfCoop + ")";
+        if (probOfCoop == 0.0)
+            return "Cheater";
+        else if (probOfCoop == 1.0)
+            return "Cooperator";
+        else
+            return "Type: Random(" + probOfCoop + ")";
     }
 }

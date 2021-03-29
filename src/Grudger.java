@@ -1,5 +1,9 @@
 import java.util.ArrayList;
 
+/**
+ * The Grudger cooperates at first, but if its opponent betrays,
+ * it will always betray thereafter.
+ */
 public class Grudger extends Prisoner {
 
     private boolean opponentBetrayed;

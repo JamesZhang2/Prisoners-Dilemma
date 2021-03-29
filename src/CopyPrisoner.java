@@ -1,5 +1,19 @@
 import java.util.ArrayList;
 
+/**
+ * The CopyPrisoner, in general, copies the response of their opponent's history responses
+ * If its logic gate is OR, it cooperates in the first m rounds
+ * and only betrays in the current round
+ * if all of its opponent's responses in the previous m rounds have been to betray.
+ * If its logic gate is AND, it only cooperates in the current round
+ * if all of its opponent's responses in the previous m rounds have been to cooperate.
+ * m is the memory of the CopyPrisoner.
+ *
+ * Special CopyPrisoners:
+ * CopyPrisoner(OR, 1) and CopyPrisoner(AND, 1) is called a Copycat (TIT-FOR-TAT).
+ * CopyPrisoner(OR, 2) is called a Copykitten (TIT-FOR-TWO-TATS).
+ * CopyPrisoner(AND, 2) is called a Copylion (TWO-TITS-FOR-TAT).
+ */
 public class CopyPrisoner extends Prisoner{
     private LogicGate gate;
     private int memory;

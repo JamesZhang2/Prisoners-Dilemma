@@ -1,5 +1,11 @@
 import java.util.ArrayList;
 
+/**
+ * Detective's first few responses would follow its probe.
+ * If its opponent doesn't betray in any of the probe.length rounds,
+ * the Detective becomes a Cheater to exploit its opponent.
+ * Otherwise, it becomes a Copycat.
+ */
 public class Detective extends Prisoner{
     private final boolean[] probe;
     private boolean oppHasBetrayed;

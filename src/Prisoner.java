@@ -1,5 +1,9 @@
 import java.util.ArrayList;
 
+/**
+ * Prisoner is the abstract class that includes many common states and behaviors
+ * for the different types of Prisoners.
+ */
 public abstract class Prisoner {
 
     protected ArrayList<Boolean> history;

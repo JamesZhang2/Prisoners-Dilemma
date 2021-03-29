@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-/*
+/**
  * A prison is a tournament with many prisoners.
  * Every two prisoners compete with each other in a match of several rounds.
  * At the end of all the matches, the prisoners' scores are sorted.
