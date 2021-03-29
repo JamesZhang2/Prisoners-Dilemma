@@ -15,7 +15,7 @@ public class RandomPrisoner extends Prisoner {
     }
 
     public String toString() {
-        String str = "Type: Random Prisoner (probOfCoop = " + probOfCoop + ")\n";
+        String str = "Type: Random(" + probOfCoop + ")\n";
         str = str + "Total Score: " + score;
         return str;
     }
