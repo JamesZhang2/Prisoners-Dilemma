@@ -3,7 +3,6 @@ import java.util.ArrayList;
 public class CopyPrisoner extends Prisoner{
     private LogicGate gate;
     private int memory;
-    private boolean opponentBetrayed = false;
 
     public CopyPrisoner(double probOfMistake, LogicGate gate, int memory) {
         super(probOfMistake);

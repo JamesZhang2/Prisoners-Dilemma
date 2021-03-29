@@ -9,12 +9,14 @@ public class Prison {
     public static final double CD = 0.0;
 
     public static void main(String[] args) {
-        prisoners = new Prisoner[5];
+        prisoners = new Prisoner[6];
         prisoners[0] = new RandomPrisoner(PROB_OF_MISTAKE, 0);
         prisoners[1] = new RandomPrisoner(PROB_OF_MISTAKE, 1);
         prisoners[2] = new Grudger(PROB_OF_MISTAKE);
         prisoners[3] = new CopyPrisoner(PROB_OF_MISTAKE, CopyPrisoner.LogicGate.OR, 1);
         prisoners[4] = new CopyPrisoner(PROB_OF_MISTAKE, CopyPrisoner.LogicGate.OR, 2);
+        boolean[] probe = {true, false, true};
+        prisoners[5] = new Detective(PROB_OF_MISTAKE, probe);
         startTournament();
         printResults();
     }
