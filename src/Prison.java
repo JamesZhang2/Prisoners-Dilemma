@@ -3,13 +3,38 @@ public class Prison {
     private static Prisoner[] prisoners;
     public static final double PROB_OF_MISTAKE = 0.1;
     public static final int ROUNDS_PER_GAME = 10;
+    public static final int GENERATIONS = 30;
+    // The number of prisoners to be replaced by the end of each generation
+    public static final int REPLACEMENT_PER_GEN = 3;
     public static final double DC = 5.0;
     public static final double CC = 3.0;
     public static final double DD = 1.0;
     public static final double CD = 0.0;
 
     public static void main(String[] args) {
-        prisoners = new Prisoner[6];
+        initializePrisoners();
+        for (int i = 0; i < GENERATIONS; i++) {
+            resetAllScores();
+            startTournament();
+            sortPrisoners();
+            printResults(i);
+            evolve();
+        }
+    }
+
+    private static void resetAllScores() {
+        for (Prisoner prisoner : prisoners) {
+            prisoner.resetScore();
+        }
+    }
+
+    private static void initializePrisoners() {
+        prisoners = new Prisoner[20];
+        for (int i = 0; i < 20; i++) {
+            prisoners[i] = new RandomPrisoner(PROB_OF_MISTAKE, i / 20.0);
+        }
+
+        /*
         prisoners[0] = new RandomPrisoner(PROB_OF_MISTAKE, 0);
         prisoners[1] = new RandomPrisoner(PROB_OF_MISTAKE, 1);
         prisoners[2] = new Grudger(PROB_OF_MISTAKE);
@@ -17,13 +42,14 @@ public class Prison {
         prisoners[4] = new CopyPrisoner(PROB_OF_MISTAKE, CopyPrisoner.LogicGate.OR, 2);
         boolean[] probe = {true, false, true};
         prisoners[5] = new Detective(PROB_OF_MISTAKE, probe);
-        startTournament();
-        printResults();
+        */
     }
 
     private static void startTournament() {
         for (int i = 0; i < prisoners.length; i++) {
             for (int j = i + 1; j < prisoners.length; j++) {
+                prisoners[i].clearHistory();
+                prisoners[j].clearHistory();
                 startMatch(prisoners[i], prisoners[j]);
             }
         }
@@ -56,9 +82,40 @@ public class Prison {
         }
     }
 
-    private static void printResults() {
+    private static void sortPrisoners() {
+        // Selection sort
+        for (int i = 0; i < prisoners.length; i++) {
+            int maxIndex = findMax(i);
+            // Swap
+            Prisoner temp = prisoners[i];
+            prisoners[i] = prisoners[maxIndex];
+            prisoners[maxIndex] = temp;
+        }
+    }
+
+    private static int findMax(int startIndex) {
+        int maxID = startIndex;
+        double maxScore = prisoners[startIndex].getScore();
+        for (int i = startIndex; i < prisoners.length; i++) {
+            if (prisoners[i].getScore() > maxScore) {
+                maxScore = prisoners[i].getScore();
+                maxID = i;
+            }
+        }
+        return maxID;
+    }
+
+    private static void printResults(int gen) {
+        System.out.println("Generation " + (gen + 1) + ": ");
         for (int i = 0; i < prisoners.length; i++) {
             System.out.println(prisoners[i]);
+        }
+        System.out.println("--------------------------");
+    }
+
+    private static void evolve() {
+        for (int i = 0; i < REPLACEMENT_PER_GEN; i++) {
+            prisoners[prisoners.length - i - 1] = prisoners[i].clone();
         }
     }
 }

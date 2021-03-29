@@ -28,6 +28,11 @@ public class Detective extends Prisoner{
         }
     }
 
+    @Override
+    public Prisoner clone() {
+        return new Detective(probOfMistake, probe);
+    }
+
     public String toString() {
         String probeStr = "";
         for (int i = 0; i < probe.length - 1; i++) {

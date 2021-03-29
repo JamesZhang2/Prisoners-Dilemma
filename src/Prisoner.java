@@ -7,6 +7,7 @@ public abstract class Prisoner {
     protected double score = 0;  // Score for the current generation
 
     public abstract boolean coopOrBetray(ArrayList<Boolean> oppHistory);
+    public abstract Prisoner clone();
 
     public void addToHistory(boolean response) {
         history.add(response);
@@ -23,6 +24,10 @@ public abstract class Prisoner {
 
     public void resetScore() {
         score = 0;
+    }
+
+    public void clearHistory() {
+        history = new ArrayList<>();
     }
 
     public void addScore(double scoreToAdd) {

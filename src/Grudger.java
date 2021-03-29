@@ -15,6 +15,11 @@ public class Grudger extends Prisoner {
         return makeMistake(!opponentBetrayed);
     }
 
+    @Override
+    public Prisoner clone() {
+        return new Grudger(probOfMistake);
+    }
+
     public String toString() {
         String str = "Type: Grudger\n";
         str = str + "Total Score: " + score;

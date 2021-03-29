@@ -35,6 +35,11 @@ public class CopyPrisoner extends Prisoner{
         }
     }
 
+    @Override
+    public Prisoner clone() {
+        return new CopyPrisoner(probOfMistake, gate, memory);
+    }
+
     public String toString() {
         String str = "Type: Copy(" + gate + ", " + memory + ")\n";
         str = str + "Total Score: " + score;

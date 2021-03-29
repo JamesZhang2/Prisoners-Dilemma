@@ -14,6 +14,11 @@ public class RandomPrisoner extends Prisoner {
         return makeMistake(Math.random() < probOfCoop);
     }
 
+    @Override
+    public Prisoner clone() {
+        return new RandomPrisoner(probOfMistake, probOfCoop);
+    }
+
     public String toString() {
         String str = "Type: Random(" + probOfCoop + ")\n";
         str = str + "Total Score: " + score;
