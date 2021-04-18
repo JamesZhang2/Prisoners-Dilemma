@@ -1,18 +1,23 @@
-import java.util.ArrayList;
-
 /**
  * A prison is a tournament with many prisoners.
  * Every two prisoners compete with each other in a match of several rounds.
  * At the end of all the matches, the prisoners' scores are sorted.
  * The prisoners with the highest scores clone themselves and replace the prisoners
  * with the lowest scores, and a new generation begins.
+ *
+ * A simulation runs many prisons with the same initial conditions and tallies up the results.
  */
-public class Prison {
+public class Simulation {
 
+    public static final boolean PRISONER_DEBUG = false;
+    public static final boolean GENERATION_DEBUG = false;
+    public static final boolean SIMULATION_DEBUG = true;
+
+    // The following constants and private instance variables are used for each prison
     private static Prisoner[] prisoners;
-    public static final double PROB_OF_MISTAKE = 0.1;
+    public static final double PROB_OF_MISTAKE = 0.2;
     public static final int ROUNDS_PER_GAME = 10;
-    public static final int GENERATIONS = 50;
+    public static final int GENERATIONS = 100;
     // The number of prisoners to be replaced by the end of each generation
     public static final int REPLACEMENT_PER_GEN = 3;
     // B: Betray, C: Cooperate
@@ -22,13 +27,40 @@ public class Prison {
     public static final double BB = 0.0;
     public static final double CB = -1.0;
 
+    // The following constants and private instance variables are for simulations
+    public static final double PRISONS_PER_SIMULATION = 10;
+    private static final PrisonerTally totalTally = new PrisonerTally();
+
     public static void main(String[] args) {
-        initializePrisoners();
+        for (int i = 0; i < PRISONS_PER_SIMULATION; i++) {
+            runPrison();
+            // Merge the results of the current tournament to the total results
+            PrisonerTally tally = new PrisonerTally(prisoners);
+            totalTally.combine(tally);
+            if (SIMULATION_DEBUG) {
+                System.out.println("Simulation " + (i + 1) + ":\n" + tally);
+                System.out.println("--------------------------");
+            }
+        }
+        System.out.println("Final results:\n" + totalTally);
+    }
+
+    /**
+     * Run the prison (tournament) once
+     */
+    public static void runPrison() {
+        // Initialize prisoners
+        if (PRISONER_DEBUG)
+            initializeTestPrisoners();
+        else
+            initializePrisoners();
+        // Run the prison
         for (int i = 0; i < GENERATIONS; i++) {
             resetAllScores();
             startTournament();
             sortPrisoners();
-            printResults(i);
+            if (checkDomination(i))  // One type of prisoner has dominated the prison
+                break;
             evolve();
         }
     }
@@ -96,7 +128,7 @@ public class Prison {
     }
 
     /**
-     * Every two prisoners compete with each other in a match of several rounds
+     * Every two prisoners compete with each other (round-robin) in a match of several rounds
      */
     private static void startTournament() {
         for (int i = 0; i < prisoners.length; i++) {
@@ -108,7 +140,11 @@ public class Prison {
         }
     }
 
-
+    /**
+     * Play one match between prisoners p1 and p2
+     * @param p1 The first prisoner
+     * @param p2 The second prisoner
+     */
     private static void startMatch(Prisoner p1, Prisoner p2) {
         for (int i = 0; i < ROUNDS_PER_GAME; i++) {
             // Cache choices so that the later player
@@ -136,12 +172,12 @@ public class Prison {
                 }
             }
         }
-        /*
-        // Debug
-        System.out.println(p1);
-        System.out.println(p2);
-        System.out.println("-----------");
-        */
+
+        if (PRISONER_DEBUG) {
+            System.out.println(p1);
+            System.out.println(p2);
+            System.out.println("-----------");
+        }
     }
 
     /**
@@ -175,45 +211,23 @@ public class Prison {
     }
 
     /**
-     * Print the results for each generation
+     * Check whether one type of prisoner has dominated the prison
+     * When debugging, print the results for each generation
      * @param gen The generation to print results
+     * @return Whether one type of prisoner has dominated the prison
      */
-    private static void printResults(int gen) {
-        System.out.println("Generation " + (gen + 1) + ": ");
-        printClasses();
-        System.out.println("--------------------------");
+    private static boolean checkDomination(int gen) {
+        PrisonerTally tally = new PrisonerTally(prisoners);
+        if (GENERATION_DEBUG) {
+            System.out.println("Generation " + (gen + 1) + ": ");
+            System.out.println(tally);
+            System.out.println("--------------------------");
+        }
+        return tally.getPrisonerTypes().size() == 1;  // One type of prisoner has dominated the prison
     }
 
     /**
-     * Print how many numbers of prisoners there are for each prisoner type
-     */
-    private static void printClasses() {
-        ArrayList<String> prisonerTypes = new ArrayList<>();
-        ArrayList<Integer> prisonerNumbers = new ArrayList<>();
-        for (Prisoner prisoner : prisoners) {
-            boolean isFound = false;
-            for (int i = 0; i < prisonerTypes.size(); i++) {
-                if (prisoner.getType().equals(prisonerTypes.get(i))) {
-                    // Current type of prisoner is found, increment prisonerNumbers
-                    prisonerNumbers.set(i, prisonerNumbers.get(i) + 1);
-                    isFound = true;
-                    break;
-                }
-            }
-            // Current type of prisoner not found, add this type to the prisonerTypes list
-            if (!isFound) {
-                prisonerTypes.add(prisoner.getType());
-                prisonerNumbers.add(1);
-            }
-        }
-        // Print the results
-        for (int i = 0; i < prisonerTypes.size(); i++) {
-            int num = prisonerNumbers.get(i);
-            System.out.println(prisonerTypes.get(i) + ": " + num + (num == 1 ? " Prisoner" : " Prisoners"));
-        }
-    }
-
-    /**
+     * Debug
      * Printing the detailed results (type and score) of each prisoner
      * @param gen The generation to print results
      */
