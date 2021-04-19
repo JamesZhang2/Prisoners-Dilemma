@@ -11,11 +11,11 @@ public class Simulation {
 
     public static final boolean PRISONER_DEBUG = false;
     public static final boolean GENERATION_DEBUG = false;
-    public static final boolean SIMULATION_DEBUG = true;
+    public static final boolean SIMULATION_DEBUG = false;
 
     // The following constants and private instance variables are used for each prison
     private static Prisoner[] prisoners;
-    public static final double PROB_OF_MISTAKE = 0.2;
+    public static final double PROB_OF_MISTAKE = 0;
     public static final int ROUNDS_PER_GAME = 10;
     public static final int GENERATIONS = 100;
     // The number of prisoners to be replaced by the end of each generation
@@ -28,7 +28,7 @@ public class Simulation {
     public static final double CB = -1.0;
 
     // The following constants and private instance variables are for simulations
-    public static final double PRISONS_PER_SIMULATION = 10;
+    public static final double PRISONS_PER_SIMULATION = 100;
     private static final PrisonerTally totalTally = new PrisonerTally();
 
     public static void main(String[] args) {
@@ -70,12 +70,9 @@ public class Simulation {
      */
     private static void initializePrisoners() {
         prisoners = new Prisoner[50];
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++)
-                prisoners[i * 5 + j] = new RandomPrisoner(PROB_OF_MISTAKE, i / 4.0);
-        }
-        for (int i = 25; i < 30; i++) {
-            prisoners[i] = new Grudger(PROB_OF_MISTAKE);
+                prisoners[i * 5 + j] = new RandomPrisoner(PROB_OF_MISTAKE, i / 5.0);
         }
         for (int i = 30; i < 35; i++) {
             // Copycats
@@ -90,8 +87,7 @@ public class Simulation {
             prisoners[i] = new CopyPrisoner(PROB_OF_MISTAKE, CopyPrisoner.LogicGate.AND, 2);
         }
         for (int i = 45; i < 50; i++) {
-            boolean[] probe = {true, false, true, true};
-            prisoners[i] = new Detective(PROB_OF_MISTAKE, probe);
+            prisoners[i] = new Grudger(PROB_OF_MISTAKE);
         }
     }
 

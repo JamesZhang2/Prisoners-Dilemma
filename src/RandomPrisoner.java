@@ -30,9 +30,9 @@ public class RandomPrisoner extends Prisoner {
     @Override
     public String getType() {
         if (probOfCoop == 0.0)
-            return "Cheater";
+            return "Type: Cheater";
         else if (probOfCoop == 1.0)
-            return "Cooperator";
+            return "Type: Cooperator";
         else
             return "Type: Random(" + probOfCoop + ")";
     }

@@ -56,6 +56,12 @@ public class CopyPrisoner extends Prisoner{
 
     @Override
     public String getType() {
+        if (memory == 1)
+            return "Type: Copycat";
+        if (gate == LogicGate.OR && memory == 2)
+            return "Type: Copykitten";
+        if (gate == LogicGate.AND && memory == 2)
+            return "Type: Copylion";
         return "Type: Copy(" + gate + ", " + memory + ")";
     }
 
