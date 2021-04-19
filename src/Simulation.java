@@ -16,7 +16,7 @@ public class Simulation {
     // The following constants and private instance variables are used for each prison
     private static Prisoner[] prisoners;
     public static final double PROB_OF_MISTAKE = 0;
-    public static final int ROUNDS_PER_GAME = 10;
+    public static final int ROUNDS_PER_GAME = 1;
     public static final int GENERATIONS = 100;
     // The number of prisoners to be replaced by the end of each generation
     public static final int REPLACEMENT_PER_GEN = 3;
@@ -62,6 +62,7 @@ public class Simulation {
             if (checkDomination(i))  // One type of prisoner has dominated the prison
                 break;
             evolve();
+            shuffle();
         }
     }
 
@@ -69,10 +70,79 @@ public class Simulation {
      * Initialize prisoners into different types
      */
     private static void initializePrisoners() {
+        halfCheaters();
+    }
+
+    /**
+     * 5 of each:
+     * Cheaters, Random(0.2), Random(0.4), Random(0.6), Random(0.8), Cooperators
+     * Copycats, Copykittens, Copylions, Grudgers
+     */
+    private static void standardPrisoners() {
         prisoners = new Prisoner[50];
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++)
                 prisoners[i * 5 + j] = new RandomPrisoner(PROB_OF_MISTAKE, i / 5.0);
+        }
+        for (int i = 30; i < 35; i++) {
+            // Copycats
+            prisoners[i] = new CopyPrisoner(PROB_OF_MISTAKE, CopyPrisoner.LogicGate.OR, 1);
+        }
+        for (int i = 35; i < 40; i++) {
+            // Copykittens
+            prisoners[i] = new CopyPrisoner(PROB_OF_MISTAKE, CopyPrisoner.LogicGate.OR, 2);
+        }
+        for (int i = 40; i < 45; i++) {
+            // Copylions
+            prisoners[i] = new CopyPrisoner(PROB_OF_MISTAKE, CopyPrisoner.LogicGate.AND, 2);
+        }
+        for (int i = 45; i < 50; i++) {
+            prisoners[i] = new Grudger(PROB_OF_MISTAKE);
+        }
+    }
+
+    /**
+     * 25 Cheaters
+     * 5 of each:
+     * Cooperators, Copycats, Copykittens, Copylions, Grudgers
+     */
+    private static void halfCheaters() {
+        prisoners = new Prisoner[50];
+        for (int i = 0; i < 25; i++) {
+            prisoners[i] = new RandomPrisoner(PROB_OF_MISTAKE, 0);
+        }
+        for (int i = 25; i < 30; i++) {
+            prisoners[i] = new RandomPrisoner(PROB_OF_MISTAKE, 1);
+        }
+        for (int i = 30; i < 35; i++) {
+            // Copycats
+            prisoners[i] = new CopyPrisoner(PROB_OF_MISTAKE, CopyPrisoner.LogicGate.OR, 1);
+        }
+        for (int i = 35; i < 40; i++) {
+            // Copykittens
+            prisoners[i] = new CopyPrisoner(PROB_OF_MISTAKE, CopyPrisoner.LogicGate.OR, 2);
+        }
+        for (int i = 40; i < 45; i++) {
+            // Copylions
+            prisoners[i] = new CopyPrisoner(PROB_OF_MISTAKE, CopyPrisoner.LogicGate.AND, 2);
+        }
+        for (int i = 45; i < 50; i++) {
+            prisoners[i] = new Grudger(PROB_OF_MISTAKE);
+        }
+    }
+
+    /**
+     * 25 Cooperators
+     * 5 of each:
+     * Cheaters, Copycats, Copykittens, Copylions, Grudgers
+     */
+    private static void halfCooperators() {
+        prisoners = new Prisoner[50];
+        for (int i = 0; i < 25; i++) {
+            prisoners[i] = new RandomPrisoner(PROB_OF_MISTAKE, 1);
+        }
+        for (int i = 25; i < 30; i++) {
+            prisoners[i] = new RandomPrisoner(PROB_OF_MISTAKE, 0);
         }
         for (int i = 30; i < 35; i++) {
             // Copycats
@@ -242,6 +312,21 @@ public class Simulation {
     private static void evolve() {
         for (int i = 0; i < REPLACEMENT_PER_GEN; i++) {
             prisoners[prisoners.length - i - 1] = prisoners[i].clone();
+        }
+    }
+
+    /**
+     * Shuffle the prisoners using selection shuffle
+     * Shuffling is needed for fairness because sorting algorithm and evolution
+     * don't account for the situation where some prisoners have the same scores
+     */
+    private static void shuffle() {
+        for (int i = prisoners.length - 1; i > 0; i--) {
+            int rnd = (int)(Math.random() * (i + 1));
+            // Swap
+            Prisoner temp = prisoners[i];
+            prisoners[i] = prisoners[rnd];
+            prisoners[rnd] = temp;
         }
     }
 }
